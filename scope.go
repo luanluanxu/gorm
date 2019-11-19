@@ -716,13 +716,13 @@ func (scope *Scope) whereSQL() (sql string) {
 	)
 
 	if !scope.Search.Unscoped && hasDeletedAtField {
-		sql := fmt.Sprintf("%v.%v = %v", quotedTableName, scope.Quote(deletedAtField.DBName),0)
+		sql := fmt.Sprintf("%v.%v != %v", quotedTableName, scope.Quote(deletedAtField.DBName),0)
 		primaryConditions = append(primaryConditions, sql)
 	}
 
 	if !scope.PrimaryKeyZero() {
 		for _, field := range scope.PrimaryFields() {
-			sql := fmt.Sprintf("%v.%v != %v", quotedTableName, scope.Quote(field.DBName), scope.AddToVars(field.Field.Interface()))
+			sql := fmt.Sprintf("%v.%v = %v", quotedTableName, scope.Quote(field.DBName), scope.AddToVars(field.Field.Interface()))
 			primaryConditions = append(primaryConditions, sql)
 		}
 	}
